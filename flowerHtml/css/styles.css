@@ -1,0 +1,131 @@
+.container {
+    width: 100%;
+    height: 100%;
+    background: lightblue;
+    position: absolute;
+    
+
+
+  }
+
+  .container::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, #3498db 10%, transparent 20%),
+      radial-gradient(circle, transparent 10%, #3498db 20%);
+    background-size: 30px 30px; /* Adjust the size of the pattern */
+    animation: moveBackground 8s linear infinite; /* Adjust the animation duration and timing function */
+  }
+
+  @keyframes moveBackground {
+    0% {
+      transform: translate(0, 0);
+    }
+    100% {
+      transform: translate(20%, 20%);
+    }
+  }
+
+   /* ====================== */
+.image-container {
+    position: fixed;
+    display: inline-block; /* Đặt vị trí tuyệt đối */
+    top: 0%; /* Đặt vị trí ở phía trên cùng của trang */
+    left: 0%; /* Đặt vị trí ở bên trái cùng của trang */
+    margin: 10px; /* Khoảng cách với cạnh của trang */
+}
+img {
+    width: 300px; /* Chiều rộng mong muốn */
+    height: 300px; /* Giữ nguyên tỷ lệ */
+}
+.text-container {
+  position: fixed;
+  top: 0%;
+  left: 400px;
+ 
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 20px;
+  max-width: 80%;
+  overflow-y: auto; /* Add vertical scrollbar */
+  max-height: 60%; /* Set maximum height to 60% of the container */
+}
+.image-title {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5); /* Phông chữ mờ đen */
+    padding: 5px 10px;
+    margin: 0;
+}
+
+   /* ====================== */
+   .cta {
+    position: fixed;
+    top: 400px;
+    left: 200px;
+    text-decoration: none;
+    transform: translate(-50%, -50%);
+    margin: auto;
+    padding: 12px 18px;
+    transition: all 0.2s ease;
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+  
+  .cta:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    border-radius: 50px;
+    background: #b1dae7;
+    width: 45px;
+    height: 45px;
+    transition: all 0.3s ease;
+  }
+  
+  .cta span {
+    position: relative;
+    font-family: "Ubuntu", sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: #234567;
+  }
+  
+  .cta svg {
+    position: relative;
+    top: 0;
+    margin-left: 10px;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke: #234567;
+    stroke-width: 2;
+    transform: translateX(-5px);
+    transition: all 0.3s ease;
+  }
+  
+  .cta:hover:before {
+    width: 100%;
+    background: #b1dae7;
+  }
+  
+  .cta:hover svg {
+    transform: translateX(0);
+  }
+  
+  .cta:active {
+     /* Hoặc giá trị top mong muốn khi nút được nhấn */
+    transform: translate(-50%, -50%) scale(0.95); /* Đồng thời giữ nguyên phần trung tâm */
+  }
+  
+  

@@ -1,0 +1,151 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flower Classifier</title>
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"> </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="text-container">
+<h2>Upload your image file heree</h2>
+<h3>Please be sure that the flowers will be at close to the center of the image as possible <a href="flowerHtml/1.html">Tên Liên Kết</a></h3>
+</div>
+
+
+
+
+<div class="upload-container">
+<label for="file" class="custum-file-upload">
+    <div class="icon">
+        <svg viewBox="0 0 24 24" fill="" xmlns="http://www.w3.org/2000/svg">
+            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+            <g id="SVGRepo_iconCarrier">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M10 1C9.73478 1 9.48043 1.10536 9.29289 1.29289L3.29289 7.29289C3.10536 7.48043 3 7.73478 3 8V20C3 21.6569 4.34315 23 6 23H7C7.55228 23 8 22.5523 8 22C8 21.4477 7.55228 21 7 21H6C5.44772 21 5 20.5523 5 20V9H10C10.5523 9 11 8.55228 11 8V3H18C18.5523 3 19 3.44772 19 4V9C19 9.55228 19.4477 10 20 10C20.5523 10 21 9.55228 21 9V4C21 2.34315 19.6569 1 18 1H10ZM9 7H6.41421L9 4.41421V7ZM14 15.5C14 14.1193 15.1193 13 16.5 13C17.8807 13 19 14.1193 19 15.5V16V17H20C21.1046 17 22 17.8954 22 19C22 20.1046 21.1046 21 20 21H13C11.8954 21 11 20.1046 11 19C11 17.8954 11.8954 17 13 17H14V16V15.5ZM16.5 11C14.142 11 12.2076 12.8136 12.0156 15.122C10.2825 15.5606 9 17.1305 9 19C9 21.2091 10.7909 23 13 23H20C22.2091 23 24 21.2091 24 19C24 17.1305 22.7175 15.5606 20.9844 15.122C20.7924 12.8136 18.858 11 16.5 11Z" fill=""></path>
+            </g>
+        </svg>
+    </div>
+    <div class="text">
+        <span>Click to upload image</span>
+        
+    </div>
+    <input type="file" name="image-upload" id="image-upload" accept="image/*" />
+</label>
+<br>
+<button class="button" id="submit" name="submit"><p>Find this Flower</p></button>
+</div>
+
+
+
+
+<br>
+<canvas id="canvas-review" width="224px" height="224px"></canvas>
+</div>
+
+
+
+
+
+
+
+
+<script>
+    const canvas = document.getElementById('canvas-review')
+    const model = tf.loadLayersModel('./model/model.json')
+    context = canvas.getContext('2d');
+    const labels = []
+    const imgInp = document.getElementById("image-upload")
+
+    const predict_func = function(e) {
+    model.then(function(res) {
+        const img = tf.browser.fromPixels(canvas).as4D(1,224,224,3);
+        tf.browser.fromPixels(canvas).print();
+        const prediction = res.predict(img);
+
+        //tf.topk: Lấy ra indice của những giá trị cao nhất
+        //cú pháp: tf.topk(array,số giá trị cần lấy, sorted=true)
+
+        const topk_obj = tf.topk(prediction,3,sorted=true);
+        values_obj = topk_obj.values;
+        indices_obj = topk_obj.indices;
+        const values = values_obj.dataSync();
+        const indices = indices_obj.dataSync();
+        const top_indices = indices[0] +1;
+        redirect_URL = `./flowerHtml/${top_indices}.html`;
+        window.location.href = redirect_URL;
+
+        //indices chứa index của các giá trị cao nhất, sắp xếp theo độ tin cậy giảm dần
+        //values chứa độ tin cậy (theo mô hình) của các giá trị dự báo
+
+    }, function (err) {
+        console.log(err);
+    });
+}
+    const get_labels = function() {
+        $.ajax({
+            url:'./model/labels.txt',
+            success: function (data){
+                lines = data.split("\r\n")
+                lines.forEach(line => {
+                    label = line.split(" ").slice(1).join(" ")
+                    if (label != "") {
+                    labels.push(label)
+                    }
+                });
+            }
+        });
+    }
+
+    get_labels()
+    //labels chứa tên của các label, được load từ ./model/labels.txt
+
+    document.getElementById("submit").addEventListener("click", predict_func)
+    imgInp.addEventListener("change", function() {
+
+    var hasInvalidFiles = false;
+    for (var i = 0; i < this.files.length; i++) {
+        var file = this.files[i];
+        
+        if (!file.type.startsWith("image/")) {
+        hasInvalidFiles = true;
+        }
+    }
+    
+    if(hasInvalidFiles) {
+        imgInp.value = ""; 
+        alert("Unsupported file selected. Only support image files.");
+    }
+    });
+    imgInp.onchange = evt => {
+    const [file] = imgInp.files
+    if (file) {
+        console.log(file)
+        image = new Image()
+        image.onload = function() {
+            width = image.width
+            height = image.height
+            center_width = width / 2
+            center_height = height / 2
+            sX = 0
+            sY = 0
+            sHeight = height
+            sWidth = width
+            dWidth = 224
+            dHeight = 224
+            if (width > height) { //height is smaller, we should bring height to account to sx
+                sWidth = height
+                sX = center_width - (height / 2)
+            }
+            if (height > width) {
+                sHeight = width
+                sY = center_height - (width / 2)
+            }
+            context.drawImage(image, sX, sY, sWidth, sHeight, 0, 0, dWidth, dHeight);
+        }
+        image.src = URL.createObjectURL(file);
+    }
+    }
+</script>
+</body>

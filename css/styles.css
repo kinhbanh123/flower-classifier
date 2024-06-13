@@ -1,0 +1,173 @@
+.container {
+    /* Basic dimensions and centering */
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute; /* Đặt vị trí tuyệt đối */
+    top: 0; /* Đặt vị trí bên trên cùng */
+    left: 0; /* Đặt vị trí bên trái cùng */
+    padding: 20px; /* Tạo khoảng cách xung quanh phần tử */
+    /* Dark mode colors and gradient */
+    background: #121212; /* Fallback for browsers that don't support gradients */
+    background: linear-gradient(
+      135deg,
+      #121212 25%,
+      #1a1a1a 25%,
+      #1a1a1a 50%,
+      #121212 50%,
+      #121212 75%,
+      #1a1a1a 75%,
+      #1a1a1a
+    );
+    background-size: 40px 40px;
+  
+    /* Animation */
+    animation: move 4s linear infinite;
+  }
+  
+  @keyframes move {
+    0% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: 40px 40px;
+    }
+  }
+  .button {
+    all: unset;
+    display: flex;
+    align-items: center;
+    position: relative;
+    justify-content: center;
+    padding: 0.6em 2em;
+    border: mediumspringgreen solid 0.15em;
+    border-radius: 0.25em;
+    color: mediumspringgreen;
+    font-size: 1.5em;
+    font-weight: 600;
+    cursor: pointer;
+    overflow: hidden;
+    transition: border 300ms, color 300ms;
+    user-select: none;
+  }
+  
+  .button p {
+    z-index: 1;
+  }
+  
+  .button:hover {
+    color: #212121;
+  }
+  
+  .button:active {
+    border-color: teal;
+  }
+  
+  .button::after, .button::before {
+    content: "";
+    position: absolute;
+    width: 9em;
+    aspect-ratio: 1;
+    background: mediumspringgreen;
+    opacity: 50%;
+    border-radius: 50%;
+    transition: transform 500ms, background 300ms;
+  }
+  
+  .button::before {
+    left: 0;
+    transform: translateX(-8em);
+  }
+  
+  .button::after {
+    right: 0;
+    transform: translateX(8em);
+  }
+  
+  .button:hover:before {
+    transform: translateX(-1em);
+  }
+  
+  .button:hover:after {
+    transform: translateX(1em);
+  }
+  
+  .button:active:before,
+  .button:active:after {
+    background: teal;
+  }
+  
+    
+.text-container {
+    position: absolute;
+    top: 40px; /* Đặt vị trí bên trên */
+    left: 40px; /* Đặt vị trí bên trái */
+    color: white; /* Màu chữ trắng */
+}
+
+
+h2 {
+    margin: 0; /* Xóa các margin mặc định */
+}
+h3 {
+  margin: 0; /* Xóa các margin mặc định */
+}
+
+.custum-file-upload {
+  height: 200px;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: space-between;
+  gap: 20px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed #e8e8e8;
+  background-color: #212121;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0px 48px 35px -48px #e8e8e8;
+  
+}
+
+.custum-file-upload .icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.custum-file-upload .icon svg {
+  height: 80px;
+  fill: #e8e8e8;
+}
+
+.custum-file-upload .text span {
+  font-weight: 400;
+  color: #e8e8e8;
+}
+
+/* Style cho input[type=file] được ẩn đi */
+input[type="file"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+
+.upload-container {
+
+  margin-left: 20px; /* Dịch chuyển sang bên trái */
+  position: absolute; /* Sử dụng vị trí tuyệt đối */
+  left: 0; /* Đặt vị trí bên trái cùng */
+}
+
+.button {
+  margin-top: 20px;
+  margin: 0 auto; /* Canh giữa nút */
+}
